@@ -9,12 +9,12 @@
 
 | Campo | Valor |
 |---|---|
-| **Alumno/a** | _Nombre y apellidos_ |
-| **Usuario de GitHub** | _@usuario_ |
-| **IP del servidor (VM, Host-Only)** | _Documentar el valor real (`<IP_SERVIDOR>`)_ |
-| **IP del cliente (PC físico, Host-Only)** | _Documentar el valor real (`<IP_CLIENTE>`)_ |
-| **Service Name utilizado en DBeaver** | _Documentar el valor verificado_ |
-| **Fecha** | _dd/mm/aaaa_ |
+| **Alumno/a** | Angel Barrios Cuesta |
+| **Usuario de GitHub** | @bangelcjose |
+| **IP del servidor (VM, Host-Only)** | _Documentar el valor real (`192.168.56.101`)_ |
+| **IP del cliente (PC físico, Host-Only)** | _Documentar el valor real (`192.168.56.1`)_ |
+| **Service Name utilizado en DBeaver** | XEPDB1 |
+| **Fecha** | 13/10/2026 |
 
 ---
 
@@ -33,10 +33,9 @@ No se proporcionan direcciones IP de referencia: cada alumno debe consultar y an
 
 | Equipo | Comando | Dato a anotar |
 |---|---|---|
-| VM (servidor) | `ipconfig` en PowerShell | IPv4 del adaptador Host-Only → `<IP_SERVIDOR>` |
-| PC físico (cliente) | `ipconfig` en PowerShell | IPv4 del adaptador Host-Only de VirtualBox → `<IP_CLIENTE>` |
+| VM (servidor) | `ipconfig` en PowerShell | IPv4 del adaptador Host-Only → `192.168.56.101` |
+| PC físico (cliente) | `ipconfig` en PowerShell | IPv4 del adaptador Host-Only de VirtualBox → `192.168.56.1` |
 
-En el resto del documento, `<IP_SERVIDOR>` e `<IP_CLIENTE>` son marcadores que deben sustituirse por los valores reales anotados.
 
 ---
 
@@ -49,7 +48,7 @@ En la **VM**:
 1. `Win + R` → `wf.msc` (*Firewall de Windows Defender con seguridad avanzada*).
 2. **Reglas de entrada** → doble clic en `Oracle XE Listener 1521` → **Propiedades**.
 3. Pestaña **Ámbito** → sección *Dirección IP remota* → **Estas direcciones IP** → **Agregar…**
-4. Introducir `<IP_CLIENTE>` y confirmar con **Aplicar** y **Aceptar**.
+4. Introducir `192.168.56.1` y confirmar con **Aplicar** y **Aceptar**.
 
 Equivalente por PowerShell (como administrador):
 
@@ -63,7 +62,7 @@ Get-NetFirewallRule -DisplayName "Oracle XE Listener 1521" |
     Get-NetFirewallAddressFilter
 ```
 
-> El valor de `$IP_CLIENTE` debe coincidir con la IP anotada en la tabla de metadatos. No ejecutes el bloque sin sustituirla.
+> El valor de `192.168.56.1` debe coincidir con la IP anotada en la tabla de metadatos. No ejecutes el bloque sin sustituirla.
 
 📸 **Evidencia 1:** pestaña **Ámbito** mostrando la IP autorizada.
 
@@ -94,7 +93,7 @@ $IP_SERVIDOR = "192.168.56.10"
 Test-NetConnection -ComputerName $IP_SERVIDOR -Port 1521
 ```
 
-> Sustituye `192.168.56.10` por el valor de `<IP_SERVIDOR>` anotado en la tabla de metadatos. No ejecutes el bloque con la dirección de ejemplo.
+> Sustituye `192.168.56.10` por el valor de `192.168.56.101` anotado en la tabla de metadatos. No ejecutes el bloque con la dirección de ejemplo.
 
 | Resultado | Interpretación |
 |---|---|
@@ -131,7 +130,7 @@ Si la prueba desde un segundo equipo no es posible y el profesor ha confirmado q
 
 | Parámetro | Valor |
 |---|---|
-| **Host** | `<IP_SERVIDOR>` |
+| **Host** | `192.168.56.101` |
 | **Puerto** | `1521` |
 | **Service Name** | El verificado en el Laboratorio Base |
 | **Usuario** | `admin_udit` |
@@ -221,15 +220,15 @@ Une ambas capturas en una sola imagen, sin ocultar el nombre de la cuenta, el es
 
 **a)** ¿Qué diferencia existe entre un cierre ordenado de Oracle y una caída inesperada? Explica el efecto sobre las transacciones sin confirmar y la recuperación posterior.
 
-> *[Redacta aquí tu justificación técnica con tus propias palabras]*
+> Un cierre ordenado de Oracle realiza un checkpoint completo, todos los cambios realizados se guardan en los ficheros del disco en frio y cerrando de forma limpia. En cambio una caida inesperada deja la base de datos fuera de la conexion del disco.
 
 **b)** ¿Qué diferencia hay entre que el firewall descarte una conexión TCP y que el Listener esté detenido? ¿Qué prueba utilizarías para distinguir ambas situaciones?
 
-> *[Redacta aquí tu justificación técnica con tus propias palabras]*
+> Cuando el firewall bloquea la conexion TCP la solicitud del cliente es rechazada o ignorada antes de llegar a la base de datos. Y cuando el listener esta detenido la conexion se da con el cliente pero el proceso de Oracle esta detenido y el sistema operativo rechaza la conexion.
 
 **c)** ¿Qué permiso le falta al usuario restringido para crear otro usuario? ¿Por qué es peligroso utilizar una cuenta con privilegios administrativos para todas las tareas?
 
-> *[Redacta aquí tu justificación técnica con tus propias palabras]*
+> El usuario restringido le falta permisos administrativos del sistema como CREATE USER y roles como GRANT ANY PRIVILEGES. El peligro de utilizar cuentas con privilegios elevados crea consecuencias como por ejemplo; errores de sysntaxis, un comando destructivo mal ejecutado, brecha de seguridad, credenciales vulnerables a un atacante le otorgaria control absoluto.
 
 ---
 
@@ -249,11 +248,11 @@ La prueba desde un equipo no autorizado no penaliza al alumno cuando el profesor
 
 ## 7. Checklist de evidencias
 
-- [ ] **Evidencia 1:** pestaña **Ámbito** del Firewall con la IP autorizada
-- [ ] **Evidencia 2:** `Test-NetConnection` exitoso del cliente autorizado y, cuando sea técnicamente posible, resultado negativo del equipo no autorizado (o método alternativo autorizado por el profesor)
-- [ ] **Evidencia 3:** DBeaver conectado desde el cliente autorizado como `admin_udit`
-- [ ] **Evidencia 4:** composición con `USUARIO_RESTRINGIDO` en estado `OPEN` (consulta como `admin_udit`) y error `ORA-01031` al intentar crear otro usuario con `usuario_restringido`
-- [ ] Fase 4: tres justificaciones redactadas
+- [x ] **Evidencia 1:** pestaña **Ámbito** del Firewall con la IP autorizada
+- [ x] **Evidencia 2:** `Test-NetConnection` exitoso del cliente autorizado y, cuando sea técnicamente posible, resultado negativo del equipo no autorizado (o método alternativo autorizado por el profesor)
+- [ x] **Evidencia 3:** DBeaver conectado desde el cliente autorizado como `admin_udit`
+- [ x] **Evidencia 4:** composición con `USUARIO_RESTRINGIDO` en estado `OPEN` (consulta como `admin_udit`) y error `ORA-01031` al intentar crear otro usuario con `usuario_restringido`
+- [ x] Fase 4: tres justificaciones redactadas
 
 **Condiciones de las evidencias**
 
