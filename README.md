@@ -66,7 +66,7 @@ Get-NetFirewallRule -DisplayName "Oracle XE Listener 1521" |
 
 📸 **Evidencia 1:** pestaña **Ámbito** mostrando la IP autorizada.
 
-![Evidencia 1: pestaña Ámbito del Firewall](img/evidencia_1_ambito_firewall.png)
+![Evidencia 1: pestaña Ámbito del Firewall](img/evidencia_1_ambito_firewall.PNG)
 
 ---
 
@@ -124,7 +124,7 @@ Si la prueba desde un segundo equipo no es posible y el profesor ha confirmado q
 
 📸 **Evidencia 2:** captura (o composición de capturas) de la consola con el `Test-NetConnection` exitoso del cliente autorizado y, cuando sea técnicamente posible, el resultado negativo del equipo no autorizado.
 
-![Evidencia 2: Test-NetConnection](img/evidencia_2_test_netconnection.png)
+![Evidencia 2: Test-NetConnection](img/evidencia_2_test_netconnection.PNG)
 
 ### 3.4 Conexión con DBeaver como `admin_udit`
 
@@ -145,7 +145,7 @@ FROM DUAL;
 
 📸 **Evidencia 3:** DBeaver conectado desde el cliente autorizado como `admin_udit`.
 
-![Evidencia 3: DBeaver conectado como admin_udit](img/evidencia_3_dbeaver_admin.png)
+![Evidencia 3: DBeaver conectado como admin_udit](img/evidencia_3_dbeaver_admin.PNG)
 
 ---
 
@@ -212,7 +212,7 @@ Debe aparecer `ORA-01031: insufficient privileges`.
 
 Une ambas capturas en una sola imagen, sin ocultar el nombre de la cuenta, el estado ni el error. No inventes ni simules resultados; ambas pruebas deben haberse ejecutado realmente.
 
-![Evidencia 4: usuario restringido OPEN y error ORA-01031](img/evidencia_4_ora01031.png)
+![Evidencia 4: usuario restringido OPEN y error ORA-01031](img/evidencia_4_ora01031.PNG)
 
 ---
 
